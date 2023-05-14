@@ -2,7 +2,7 @@ import type { IAtom } from "./IAtom";
 
 let atomId = 0;
 
-export function atom<T>(
+function atomFactory<T>(
   payload: T | ((get: IAtom<never>["getAtom"]) => never)
 ) {
   const atom: IAtom<T> = {} as any;
@@ -55,3 +55,5 @@ export function atom<T>(
 
   return atom;
 }
+
+export { atomFactory as atom };
