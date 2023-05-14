@@ -1,23 +1,23 @@
 import { useCallback, useEffect, useState } from "react";
 import { IAtom } from "./IAtom";
 
-export function useAtomSetter<T>(source: IAtom<T>) {
-  return useCallback((value: T) => source.set(value), [source]);
+export function useAtomSetter<T>(atom: IAtom<T>) {
+  return useCallback((value: T) => atom.set(value), [atom]);
 }
 
 export function useAtomValue<T>(
-  source: IAtom<T>
+  atom: IAtom<T>
 ): T extends (...args: any[]) => any ? ReturnType<T> : T {
-  const [state, setState] = useState<T>(source.get());
+  const [state, setState] = useState<T>(atom.get());
 
   useEffect(() => {
-    const unSubscribe = source.subscribe(setState);
+    const unSubscribe = atom.subscribe(setState);
     return () => unSubscribe();
-  }, [source]);
+  }, [atom]);
 
   return state as any;
 }
 
-export function useAtom<T>(source: IAtom<T>) {
-  return [useAtomValue(source), useAtomSetter(source)] as const;
+export function useAtom<T>(atom: IAtom<T>) {
+  return [useAtomValue(atom), useAtomSetter(atom)] as const;
 }
